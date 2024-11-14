@@ -3,7 +3,7 @@ import { AuthPropsInterface } from "../../utils/interfaces/authInterfaces";
 import { DevTool } from "@hookform/devtools";
 import axios from "axios";
 import { SIGNUP_URL } from "../../utils/constants";
-import { toast, Bounce } from "react-toastify";
+import { toast } from "react-toastify";
 
 const Signup = ({ onSetPageType, form }: AuthPropsInterface) => {
   const { register, handleSubmit, control, formState, watch } = form;
@@ -13,29 +13,9 @@ const Signup = ({ onSetPageType, form }: AuthPropsInterface) => {
   const onSubmit = async (data: any) => {
     try {
       const response = await axios.post(SIGNUP_URL, data);
-      toast.success(response.data?.message, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        transition: Bounce,
-      });
+      toast.success(response.data?.message);
     } catch (error: any) {
-      toast.error(error.response?.data?.message, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        transition: Bounce,
-      });
+      toast.error(error.response?.data?.message);
     }
   };
 

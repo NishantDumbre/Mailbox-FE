@@ -4,17 +4,19 @@ import { UserSliceInterface } from "../interfaces/authInterfaces";
 const userSlice = createSlice({
   name: "user",
   initialState: {
-    email: "",
-    token: localStorage.getItem("token"),
+    user: {
+      id: null,
+      email: null,
+    },
   } as UserSliceInterface,
   reducers: {
     loginUser: (state, action) => {
-      state.email = action.payload.email;
-      state.token = action.payload.token;
+      state.user.email = action.payload.email;
+      state.user.id = action.payload.id;
     },
     logoutUser: (state) => {
-      state.token = null;
-      state.email = "";
+      state.user.email = null;
+      state.user.id = null;
     },
   },
 });

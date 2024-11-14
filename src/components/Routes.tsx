@@ -4,27 +4,32 @@ import {
   Navigate,
   RouterProvider,
 } from "react-router-dom";
-import Auth from "../pages/Auth";
 import { useSelector } from "react-redux";
 import { StoreState } from "../utils/store/appStore";
-import ForgotPwd from "./Auth/ForgotPwd";
+import AuthProvider from "./AuthProvider";
+import Auth from "../pages/Auth";
+import Home from "../pages/Home";
 
 const Routes = () => {
-  const token = useSelector((store: StoreState) => store.user.token);
+  const userPresent = useSelector((store: StoreState) => store.user.user.id);
 
   const appRouter = createBrowserRouter([
     {
       path: "/",
-      element: token ? <Navigate to="/home" /> : <Auth />,
-      errorElement: <div>ERRROR</div>,
+      element: userPresent ? <Navigate to="/home" /> : <Auth />,
+      errorElement: <div>ERROR</div>,
     },
     {
       path: "/home",
-      element: token ? <Auth /> : <Navigate to="/" />,
+      element: userPresent ? <Home /> : <Navigate to="/" />,
     },
   ]);
 
-  return <RouterProvider router={appRouter} />;
+  return (
+    <AuthProvider>
+      <RouterProvider router={appRouter} />
+    </AuthProvider>
+  );
 };
 
 export default Routes;

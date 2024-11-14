@@ -1,8 +1,10 @@
 import { UseFormReturn } from "react-hook-form"
 
 export interface UserSliceInterface{
-    token: string | null,
-    email: string
+    user:{
+        id:string | null,
+        email:string | null
+    }
 }
 
 

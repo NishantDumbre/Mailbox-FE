@@ -1,14 +1,30 @@
 import React from "react";
 import { AuthPropsInterface } from "../../utils/interfaces/authInterfaces";
 import { DevTool } from "@hookform/devtools";
+import axios from "axios";
+import { LOGIN_URL } from "../../utils/constants";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { loginUser } from "../../utils/store/userSlice";
 
 const Login = ({ onSetPageType, form }: AuthPropsInterface) => {
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
   const { register, handleSubmit, control, formState } = form;
-  const {errors} = formState
+  const { errors } = formState;
 
-  const onSubmit = (data: any) => {
-    console.log(data);
-  }
+  const onSubmit = async (data: any) => {
+    try {
+      const response = await axios.post(LOGIN_URL, data, {withCredentials:true});
+      console.log(response.data)
+      dispatch(loginUser(response.data.user))
+
+      navigate('/home')
+    } catch (error: any) {
+      toast.error(error.response?.data?.message);
+    }
+  };
 
   return (
     <div className="flex-1 p-10">
@@ -21,7 +37,7 @@ const Login = ({ onSetPageType, form }: AuthPropsInterface) => {
           type="email"
           className="w-full p-3 rounded-2xl my-3 block"
           id="loginEmail"
-          {...register('loginEmail', {
+          {...register("loginEmail", {
             required: {
               value: true,
               message: "Please enter email",
@@ -32,15 +48,28 @@ const Login = ({ onSetPageType, form }: AuthPropsInterface) => {
             },
           })}
         />
-        {errors.loginEmail && ( <p className="text-red-700 text-sm mb-2">{String(errors.loginEmail.message)}</p> )}
+        {errors.loginEmail && (
+          <p className="text-red-700 text-sm mb-2">
+            {String(errors.loginEmail.message)}
+          </p>
+        )}
         <input
           placeholder="Enter password"
           type="password"
           className="w-full p-3 rounded-2xl my-3 block"
           id="loginPassword"
-          {...register('loginPassword')}
+          {...register("loginPassword", {
+            required: {
+              value: true,
+              message: "Please enter password",
+            },
+          })}
         />
-        {errors.loginPassword && ( <p className="text-red-700 text-sm mb-2">{String(errors.loginPassword.message)}</p> )}
+        {errors.loginPassword && (
+          <p className="text-red-700 text-sm mb-2">
+            {String(errors.loginPassword.message)}
+          </p>
+        )}
         <button className="py-3 w-full shadow-lg rounded-2xl bg-cyan-400 my-3 hover:bg-cyan-500 active:shadow-none text-gray-100">
           Login
         </button>
