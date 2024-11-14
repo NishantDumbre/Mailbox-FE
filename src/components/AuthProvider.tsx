@@ -31,7 +31,7 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
   }, [dispatch]);
 
   if (loading) {
-    return <Loading />
+    return <Loading dimensions={'h-screen w-screen'}/>
   }
 
   return <>{children}</>;
